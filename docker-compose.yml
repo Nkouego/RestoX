@@ -1,0 +1,32 @@
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: db_restoX
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - restoX:/var/lib/postgresql/data
+
+    networks:
+      - restoX
+
+volumes:
+     restoX:
+
+networks:
+    restoX:
+      driver: bridge       
+      
+
+       
+
+
