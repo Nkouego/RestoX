@@ -5,8 +5,8 @@ import java.time.Instant;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.laraim237.restoX.modules.user.User;
-import com.laraim237.restoX.shared.enums.RestaurantRole;
-import com.laraim237.restoX.shared.enums.StaffStatus;
+import com.laraim237.restoX.modules.user.enums.StaffStatus;
+import com.laraim237.restoX.modules.user.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +41,7 @@ public class RestaurantUser {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private RestaurantRole role;
+	private UserRole role;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

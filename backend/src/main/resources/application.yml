@@ -13,3 +13,8 @@ spring:
         jdbc:
           time_zone: UTC
         globally_quoted_identifiers: true
+ 
+  security:
+    jwt:
+      private-key: classpath:certifications/private.pem		
+      public-key: classpath:certifications/public.pem		

@@ -10,8 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.laraim237.restoX.modules.menu.MenuItem;
 import com.laraim237.restoX.modules.restaurant.Restaurant;
 import com.laraim237.restoX.modules.user.User;
-import com.laraim237.restoX.shared.enums.AuditAction;
-import com.laraim237.restoX.shared.enums.RestaurantRole;
+import com.laraim237.restoX.modules.user.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +50,7 @@ public class AuditLog {
 	private String entityType;
 	
 	@Column(nullable = false)
-	private long entityId;
+	private Long entityId;
 	
 	@Column(columnDefinition = "TEXT")
 	private String oldValue;

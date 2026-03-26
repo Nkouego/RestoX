@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.Instant;
 
 import com.laraim237.restoX.modules.user.User;
-import com.laraim237.restoX.shared.enums.TokenType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.laraim237.restoX.shared.enums;
+package com.laraim237.restoX.modules.user.enums;
 
 public enum StaffStatus {
 	 PENDING,   

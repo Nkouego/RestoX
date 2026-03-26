@@ -1,4 +1,4 @@
-package com.laraim237.restoX.shared.enums;
+package com.laraim237.restoX.modules.audit;
 
 public enum AuditAction {
 	// Auth
