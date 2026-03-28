@@ -41,15 +41,13 @@ public class Restaurant {
 	@Column(nullable = false)
 	private String name;
 	
-	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
     private String address;
 	
 	private String logoUrl;
 	
-	@Column(nullable = false, length = 3)
+	@Column(length = 3)
 	private String currency;
 	
 	@Column(nullable = false)

@@ -89,11 +89,21 @@ public class GlobalHandlerException {
 	    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
 	}
 	
-	// 409 - Conflit (email déjà utilisé, ressource existante)
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ProblemDetail> handleConflict( DataIntegrityViolationException ex, HttpServletRequest request) {
+	
+//	@ExceptionHandler(DataIntegrityViolationException.class)
+//	public ResponseEntity<ProblemDetail> handleConflict( DataIntegrityViolationException ex, HttpServletRequest request) {
+//		log.warn("Conflict resource: {}", ex.getMessage());
+//		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+//		problem.setTitle("Conflict");
+//		problem.setInstance(URI.create(request.getRequestURI()));
+//		problem.setProperty("timestamp", Instant.now());
+//		return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+//	}
+	
+	@ExceptionHandler(AccountAlreadyExistsException.class)
+	public ResponseEntity<ProblemDetail> handleConflict( AccountAlreadyExistsException ex, HttpServletRequest request) {
 		log.warn("Conflict resource: {}", ex.getMessage());
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,"An account with this information already exists");
+	ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
 		problem.setTitle("Conflict");
 		problem.setInstance(URI.create(request.getRequestURI()));
 		problem.setProperty("timestamp", Instant.now());

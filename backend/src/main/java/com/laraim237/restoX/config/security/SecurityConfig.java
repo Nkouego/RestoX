@@ -32,7 +32,9 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	private final UserDetailsService userDetailsService;
+//	private final UserDetailsService userDetailsService;
+	private final Http401UnauthorizedEntryPoint unauthorizedEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 	
 	@Value("${spring.security.jwt.public-key}")
     private RSAPublicKey publicKey;
@@ -45,6 +47,11 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
+            .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint(unauthorizedEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
             		 "/api/v1/auth/register",
@@ -55,7 +62,7 @@ public class SecurityConfig {
             		    "/api/v1/auth/resend-code").permitAll()
                 .anyRequest().authenticated()
             )
-            .authenticationProvider(authenticationProvider())
+//            .authenticationProvider(authenticationProvider())
             .oauth2ResourceServer(oauth2 -> oauth2
             	    .jwt(Customizer.withDefaults())
             	);
@@ -82,17 +89,17 @@ public class SecurityConfig {
 		return NimbusJwtDecoder.withPublicKey(publicKey).build();
 	}
 
-	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-	       provider.setPasswordEncoder(passwordEncoder());
-	       return provider;
-	}
-	
-	@Bean
-    public AuthenticationManager authenticationManager( AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+//	@Bean
+//	public AuthenticationProvider authenticationProvider() {
+//		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+//		provider.setPasswordEncoder(passwordEncoder());
+//	       return provider;
+//	}
+//	
+//	@Bean
+//	public AuthenticationManager authenticationManager( AuthenticationConfiguration config) throws Exception {
+//       return config.getAuthenticationManager();
+//    }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

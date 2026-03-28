@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Verify your email - RestoX</title>
+</head>
+<body style="margin:0; padding:0; background-color:#000000; font-family: Arial, sans-serif; color: #ffffff;">
+  <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding: 48px 16px;">
+    <div style="width:100%; max-width:512px; overflow:hidden;">
+
+      <!-- Header -->
+      <div style="background-color:#16a34a; padding: 28px 40px; text-align:center;">
+        <h1 style="color:#ffffff; font-size:30px; font-weight:bold; letter-spacing:6px; margin:0;">🍽️ RestoX</h1>
+      </div>
+
+      <!-- Body -->
+      <div style="padding: 40px;">
+        <p style="color:#ffffff; font-size:16px; margin-bottom:12px;">
+          Hello <strong th:text="${user.fullName}">John</strong>,
+        </p>
+        <p style="font-size:14px; line-height:1.8; margin-bottom:32px;">
+          Use the code below to verify your email address and activate your RestoX account.
+        </p>
+
+        <!-- Code box -->
+        <div style="background-color:#1a1a1a; border:1px solid #333333; border-radius:8px; padding: 20px; text-align:center; margin-bottom:32px;">
+          <div style="color:#ffffff; font-size:36px; font-weight:bold; letter-spacing:12px;" th:text="${accessToken.token}">
+            A3F9K2
+          </div>
+        </div>
+
+        <p style="font-size:12px; text-align:center; margin-bottom:8px;">
+          ⏱️ This code expires in <strong th:text="${accessToken.remainingMinutes}">10</strong> minutes
+        </p>
+        <p style="font-size:12px; text-align:center;">
+          If you didn't create a RestoX account, you can safely ignore this email.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color:#0a0a0a; padding: 16px 40px; text-align:center;">
+        <p style="color:#666666; font-size:12px; margin:0;">© 2026 RestoX · All rights reserved</p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

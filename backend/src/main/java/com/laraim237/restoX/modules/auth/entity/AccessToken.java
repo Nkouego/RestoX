@@ -1,8 +1,9 @@
-package com.laraim237.restoX.modules.auth;
+package com.laraim237.restoX.modules.auth.entity;
 
 import java.time.Duration;
 import java.time.Instant;
 
+import com.laraim237.restoX.modules.auth.enums.TokenType;
 import com.laraim237.restoX.modules.user.User;
 
 import jakarta.persistence.Column;
@@ -51,6 +52,12 @@ public class AccessToken{
         this.type = type;
         this.expiredAt = Instant.now().plus(Duration.ofMinutes(durationInMinutes));
 	}
+	
+	public long getRemainingMinutes() {
+	    long minutes = Duration.between(Instant.now(), this.expiredAt).toMinutes();
+	    return Math.max(minutes, 0); 
+	}
+	
 	public boolean isExpired() {
 		return Instant.now().isAfter(this.expiredAt);
 	}

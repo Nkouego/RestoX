@@ -9,8 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.laraim237.restoX.modules.menu.MenuItem;
 import com.laraim237.restoX.modules.restaurant.Restaurant;
+import com.laraim237.restoX.modules.restaurant.RestaurantRole;
 import com.laraim237.restoX.modules.user.User;
-import com.laraim237.restoX.modules.user.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -52,10 +53,10 @@ public class AuditLog {
 	@Column(nullable = false)
 	private Long entityId;
 	
-	@Column(columnDefinition = "TEXT")
+	@Lob
 	private String oldValue;
 	
-	@Column(columnDefinition = "TEXT")
+	@Lob
 	private String newValue;
 	
 	@Column(name = "ip_address", length = 45)

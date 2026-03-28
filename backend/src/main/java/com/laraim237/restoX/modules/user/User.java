@@ -53,8 +53,6 @@ public class User{
 	@JsonIgnore
 	private String password;
 	
-	private String phone;
-	
 	@Enumerated(EnumType.STRING)
 	private SystemRole systemRole; 
 	
@@ -72,4 +70,11 @@ public class User{
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<RestaurantUser> restaurantUsers = new ArrayList<>();
 
+	public String getFullName() {
+	    return capitalize(firstName) + " " + capitalize(lastName);
+	}
+	
+	private String capitalize(String value) {
+	    return value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
+	}
 }

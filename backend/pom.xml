@@ -94,12 +94,20 @@
 		    <scope>runtime</scope>
         </dependency>
         
-        <!-- Source: https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-core -->
+       <!-- Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
 		<dependency>
-		    <groupId>com.bucket4j</groupId>
-		    <artifactId>bucket4j_jdk17-core</artifactId>
-		    <version>8.17.0</version>
+		    <groupId>org.mapstruct</groupId>
+		    <artifactId>mapstruct</artifactId>
+		    <version>1.6.3</version>
 		    <scope>compile</scope>
+		</dependency>
+		
+		<!-- Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor -->
+		<dependency>
+		    <groupId>org.mapstruct</groupId>
+		    <artifactId>mapstruct-processor</artifactId>
+		    <version>1.6.3</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -146,6 +154,11 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<annotationProcessorPaths>
+						<path>
+						    <groupId>org.mapstruct</groupId>
+						    <artifactId>mapstruct-processor</artifactId>
+						    <version>1.6.3</version>
+						</path>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
