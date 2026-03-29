@@ -45,6 +45,7 @@ public class SecurityConfig {
 	
 	private final Http401UnauthorizedEntryPoint unauthorizedEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final UserDetailsService userDetailsService;
 	
 	@Value("${spring.security.jwt.public-key}")
     private RSAPublicKey publicKey;
@@ -110,6 +111,19 @@ public class SecurityConfig {
 	    JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
 	    return new NimbusJwtEncoder(jwkSource);
 	}
+
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+	       provider.setPasswordEncoder(passwordEncoder());
+	       return provider;
+	}
+	
+	@Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

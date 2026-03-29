@@ -17,13 +17,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.laraim237.restoX.modules.audit.AuditAction;
+import com.laraim237.restoX.modules.audit.AuditService;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalHandlerException {
+	private final AuditService auditService;
 	
 	// 400 - Validation des champs (@Valid)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -58,6 +64,10 @@ public class GlobalHandlerException {
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<ProblemDetail> handleBadCredentials(BadCredentialsException ex, HttpServletRequest request) {
 		log.warn("Authentication failed {} ", ex.getMessage());
+		
+		//Audit
+		auditService.log(AuditAction.LOGIN_FAILED, null, "User", null, null, null, null, request);
+				
 		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid email or password");
 		problem.setTitle("Authentication failed");
 		problem.setInstance(URI.create(request.getRequestURI()));

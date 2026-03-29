@@ -2,6 +2,8 @@ package com.laraim237.restoX.modules.auth.service.Impl;
 
 import java.security.SecureRandom;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import com.laraim237.restoX.modules.audit.AuditAction;
 import com.laraim237.restoX.modules.audit.AuditService;
 import com.laraim237.restoX.modules.auth.dto.AuthDto;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import com.laraim237.restoX.modules.auth.entity.AccessToken;
@@ -43,8 +46,12 @@ public class AuthServiceImpl implements Authservice {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantUserRepository restaurantUserRepository;
 	private final AccessTokenRepository accessTokenRepository;
+	
 	private final RegisterMapper registerMapper;
+	
 	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
+	
 	private final EmailService emailService;
 	private final AuditService auditService;
 	private final JwtService jwtService;
@@ -135,5 +142,33 @@ public class AuthServiceImpl implements Authservice {
 				.token(jwt)
 				.refreshToken(refreshToken)
 				.build();
+	}
+
+	@Override
+	public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
+		
+		//1.Laisse Spring security s'occuper de la connexion
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(request.email(), request.password())
+		);
+		
+        //2. Trouver le user
+		User user = userRepository.findByEmailIgnoreCase(request.email())
+				    .orElseThrow(()-> new UserNotFoundException("Invalid email or password"));
+		
+		//3.generer le jwt
+		String jwt = jwtService.generateToken(user);
+		
+		//4.Generer le refresh token
+		String refreshToken = refreshTokenService.generateRefreshToken(user);
+		
+		//5.Audit
+		auditService.log(AuditAction.LOGIN_SUCCESS, user.getId(), "User", null, null, null, user.getId(), httpRequest);
+		
+		return AuthResponse.builder()
+				.token(jwt)
+				.refreshToken(refreshToken)
+				.build();
+		
 	}
 }

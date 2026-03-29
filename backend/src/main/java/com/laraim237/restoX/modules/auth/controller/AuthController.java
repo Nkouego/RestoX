@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.laraim237.restoX.modules.auth.dto.AuthDto;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import com.laraim237.restoX.modules.auth.service.Authservice;
@@ -31,7 +32,12 @@ public class AuthController {
 	
 	@PostMapping("/verify-email")
 	public ResponseEntity<AuthResponse> verifyEmail(@Valid @RequestBody VerifyEmailRequest request, HttpServletRequest httpRequest){
-		return ResponseEntity.status(HttpStatus.CREATED).body(authService.verifyEmail(request, httpRequest));	
+		return ResponseEntity.ok(authService.verifyEmail(request, httpRequest));	
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest){
+		return ResponseEntity.ok(authService.login(request, httpRequest));	
 	}
 
 }
