@@ -38,6 +38,7 @@ public class RefreshToken {
     @Column(updatable = false)
     private Instant createdAt;
 
+    @Column(nullable = false)
     public boolean revoked;
 
 }

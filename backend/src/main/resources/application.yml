@@ -16,6 +16,7 @@ spring:
  
   security:
     jwt:
+      expiration: 900
       private-key: classpath:certifications/private.pem		
       public-key: classpath:certifications/public.pem	
 

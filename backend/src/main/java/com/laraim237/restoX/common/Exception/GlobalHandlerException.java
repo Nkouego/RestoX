@@ -46,7 +46,7 @@ public class GlobalHandlerException {
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ProblemDetail> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
 		log.warn("Resource not found{} ", ex.getMessage());
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Resource not found");
 		problem.setTitle("Not Found");
 		problem.setInstance(URI.create(request.getRequestURI()));
 		problem.setProperty("timestamp", Instant.now());
@@ -90,15 +90,15 @@ public class GlobalHandlerException {
 	}
 	
 	
-//	@ExceptionHandler(DataIntegrityViolationException.class)
-//	public ResponseEntity<ProblemDetail> handleConflict( DataIntegrityViolationException ex, HttpServletRequest request) {
-//		log.warn("Conflict resource: {}", ex.getMessage());
-//		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
-//		problem.setTitle("Conflict");
-//		problem.setInstance(URI.create(request.getRequestURI()));
-//		problem.setProperty("timestamp", Instant.now());
-//		return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
-//	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ProblemDetail> handleConflict( DataIntegrityViolationException ex, HttpServletRequest request) {
+		log.warn("Conflict resource: {}", ex.getMessage());
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Violation of data integrity");
+		problem.setTitle("Conflict");
+		problem.setInstance(URI.create(request.getRequestURI()));
+		problem.setProperty("timestamp", Instant.now());
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+	}
 	
 	@ExceptionHandler(AccountAlreadyExistsException.class)
 	public ResponseEntity<ProblemDetail> handleConflict( AccountAlreadyExistsException ex, HttpServletRequest request) {
@@ -108,6 +108,26 @@ public class GlobalHandlerException {
 		problem.setInstance(URI.create(request.getRequestURI()));
 		problem.setProperty("timestamp", Instant.now());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ProblemDetail> handleUserNotFound( UserNotFoundException ex, HttpServletRequest request) {
+		log.warn("resource not found: {}", ex.getMessage());
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+		problem.setTitle("not found");
+		problem.setInstance(URI.create(request.getRequestURI()));
+		problem.setProperty("timestamp", Instant.now());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+	}
+	
+	@ExceptionHandler(OTPException.class)
+	public ResponseEntity<ProblemDetail> handleOTP( OTPException ex, HttpServletRequest request) {
+		log.warn("OTP error: {}", ex.getMessage());
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+		problem.setTitle("OTP error");
+		problem.setInstance(URI.create(request.getRequestURI()));
+		problem.setProperty("timestamp", Instant.now());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
 	}
 		
     @ExceptionHandler(Exception.class)

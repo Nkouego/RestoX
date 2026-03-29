@@ -1,5 +1,6 @@
 package com.laraim237.restoX.config.security;
 
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
@@ -19,11 +20,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,12 +42,15 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-//	private final UserDetailsService userDetailsService;
+	
 	private final Http401UnauthorizedEntryPoint unauthorizedEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 	
 	@Value("${spring.security.jwt.public-key}")
     private RSAPublicKey publicKey;
+	
+	@Value("${spring.security.jwt.private-key}")
+    private RSAPrivateKey privateKey;
 	
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -88,18 +101,15 @@ public class SecurityConfig {
 	public JwtDecoder jwtDecoder() {
 		return NimbusJwtDecoder.withPublicKey(publicKey).build();
 	}
-
-//	@Bean
-//	public AuthenticationProvider authenticationProvider() {
-//		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-//		provider.setPasswordEncoder(passwordEncoder());
-//	       return provider;
-//	}
-//	
-//	@Bean
-//	public AuthenticationManager authenticationManager( AuthenticationConfiguration config) throws Exception {
-//       return config.getAuthenticationManager();
-//    }
+	
+	@Bean
+	public JwtEncoder jwtEncoder() {
+		JWK jwk = new RSAKey.Builder(publicKey)
+			        .privateKey(privateKey)
+			        .build();
+	    JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
+	    return new NimbusJwtEncoder(jwkSource);
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

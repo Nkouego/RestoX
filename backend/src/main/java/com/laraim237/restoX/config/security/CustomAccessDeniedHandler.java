@@ -33,7 +33,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 				
-		log.error("Unauthorized error: {}", accessDeniedException.getMessage());
+		log.error("Access Denied error: {}", accessDeniedException.getMessage());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		
