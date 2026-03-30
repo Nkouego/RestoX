@@ -120,16 +120,6 @@ public class GlobalHandlerException {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<ProblemDetail> handleUserNotFound( UserNotFoundException ex, HttpServletRequest request) {
-		log.warn("resource not found: {}", ex.getMessage());
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
-		problem.setTitle("not found");
-		problem.setInstance(URI.create(request.getRequestURI()));
-		problem.setProperty("timestamp", Instant.now());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
-	}
-	
 	@ExceptionHandler(OTPException.class)
 	public ResponseEntity<ProblemDetail> handleOTP( OTPException ex, HttpServletRequest request) {
 		log.warn("OTP error: {}", ex.getMessage());

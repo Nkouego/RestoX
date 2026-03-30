@@ -5,6 +5,7 @@ import org.jspecify.annotations.Nullable;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,5 +18,7 @@ public interface Authservice {
 	AuthResponse verifyEmail(VerifyEmailRequest request, HttpServletRequest httpRequest);
 
 	AuthResponse login(LoginRequest request, HttpServletRequest httpRequest);
+
+	AuthResponse resendCode(ResendCodeRequest request, HttpServletRequest httpRequest);
 
 }

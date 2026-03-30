@@ -3,6 +3,7 @@ package com.laraim237.restoX.modules.auth.service.Impl;
 import java.security.SecureRandom;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.laraim237.restoX.common.Exception.AccountAlreadyExistsException;
 import com.laraim237.restoX.common.Exception.OTPException;
-import com.laraim237.restoX.common.Exception.UserNotFoundException;
+import com.laraim237.restoX.common.Utils.OtpUtils;
 import com.laraim237.restoX.modules.audit.AuditAction;
 import com.laraim237.restoX.modules.audit.AuditService;
 import com.laraim237.restoX.modules.auth.dto.AuthDto;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import com.laraim237.restoX.modules.auth.entity.AccessToken;
 import com.laraim237.restoX.modules.auth.enums.TokenType;
@@ -57,6 +59,7 @@ public class AuthServiceImpl implements Authservice {
 	private final JwtService jwtService;
 	private final RefreshTokenService refreshTokenService;
 	
+		
 	@Override
 	public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) {
 
@@ -84,9 +87,7 @@ public class AuthServiceImpl implements Authservice {
 		restaurantUserRepository.save(restaurantUser);
 		
 		// 5. Générer le token de vérification email
-		SecureRandom secureRandom = new SecureRandom();
-		String token = Integer.toString(1000 + secureRandom.nextInt(899999));
-		AccessToken accessToken = new AccessToken(token, user, 11, TokenType.REGISTRATION);
+		AccessToken accessToken = OtpUtils.generateAndSaveOTP(user);
 		accessTokenRepository.save(accessToken);
 		
 		 // 6. Envoyer l'email de vérification
@@ -105,7 +106,7 @@ public class AuthServiceImpl implements Authservice {
 		
 //		1. Trouver le user
 		User user = userRepository.findByEmailIgnoreCase(request.email())
-				    .orElseThrow(()-> new UserNotFoundException("User not found"));
+				    .orElseThrow(()-> new BadCredentialsException("Invalid credentials"));
 		
 //		2.Trouver le TokenType actif
 		AccessToken accessToken = accessTokenRepository.findByUserAndType(user, TokenType.REGISTRATION)
@@ -118,7 +119,6 @@ public class AuthServiceImpl implements Authservice {
 		
 //		4.Verifier code
 		if(!request.code().equals(accessToken.getToken())) {
-			accessTokenRepository.delete(accessToken);
 			throw new OTPException("Invalid code");
 		}
 		
@@ -154,7 +154,7 @@ public class AuthServiceImpl implements Authservice {
 		
         //2. Trouver le user
 		User user = userRepository.findByEmailIgnoreCase(request.email())
-				    .orElseThrow(()-> new UserNotFoundException("Invalid email or password"));
+				    .orElseThrow(()-> new BadCredentialsException("Invalid credentials"));
 		
 		//3.generer le jwt
 		String jwt = jwtService.generateToken(user);
@@ -168,6 +168,39 @@ public class AuthServiceImpl implements Authservice {
 		return AuthResponse.builder()
 				.token(jwt)
 				.refreshToken(refreshToken)
+				.build();
+		
+	}
+
+	@Override
+	public AuthResponse resendCode(ResendCodeRequest request, HttpServletRequest httpRequest) {
+		// 1.Trouve le user
+		User user = userRepository.findByEmailIgnoreCase(request.email())
+				.orElseThrow(()-> new BadCredentialsException("Invalid credentials"));
+		
+		//2.Verifie que le compte n'est pas deja actif
+		if(user.isEnabled()) {
+			throw new OTPException("Account is already verified");	
+		}
+		
+		//3.supprime l'ancien token s'il existe
+		accessTokenRepository.findByUserAndType(user, TokenType.REGISTRATION)
+		.ifPresent(accessTokenRepository::delete);
+		
+		accessTokenRepository.flush(); // Force le DELETE en base maintenant
+		
+		//4.Genere un nouveau code
+		AccessToken accessToken = OtpUtils.generateAndSaveOTP(user);
+		accessTokenRepository.save(accessToken);
+	
+		// 5. Envoyer l'email
+	    emailService.sendVerificationEmail(user, accessToken);
+	    
+	    //6.Audit
+	    auditService.log(AuditAction.EMAIL_VERIFICATION_RESENT, user.getId(), "User", null, null, null, user.getId(), httpRequest);
+	    
+		return AuthResponse.builder()
+				.message("A new verification code has been sent to your email.")
 				.build();
 		
 	}

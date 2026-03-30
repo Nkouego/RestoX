@@ -11,6 +11,7 @@ import com.laraim237.restoX.modules.auth.dto.AuthDto;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import com.laraim237.restoX.modules.auth.service.Authservice;
 
@@ -38,6 +39,11 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest){
 		return ResponseEntity.ok(authService.login(request, httpRequest));	
+	}
+	
+	@PostMapping("/resend-code")
+	public ResponseEntity<AuthResponse> resendCode(@Valid @RequestBody ResendCodeRequest request, HttpServletRequest httpRequest){
+		return ResponseEntity.ok(authService.resendCode(request, httpRequest));	
 	}
 
 }

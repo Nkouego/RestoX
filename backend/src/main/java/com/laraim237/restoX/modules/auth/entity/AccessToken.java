@@ -26,7 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "verification_token")
+@Table(name = "access_token")
 public class AccessToken{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,8 +54,9 @@ public class AccessToken{
 	}
 	
 	public long getRemainingMinutes() {
-	    long minutes = Duration.between(Instant.now(), this.expiredAt).toMinutes();
-	    return Math.max(minutes, 0); 
+	    Duration duration  = Duration.between(Instant.now(), this.expiredAt);
+	    if (duration.isNegative())  return 0;
+	    return (long) Math.ceil(duration.getSeconds() / 60.0); 
 	}
 	
 	public boolean isExpired() {

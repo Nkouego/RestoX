@@ -51,6 +51,12 @@ public class AuthDto {
 			String password
 	) {}
 	
+	public static record ResendCodeRequest(
+			@NotBlank(message = "Email is required")
+			@Email(message = "Email is not valid")
+			String email
+			) {}
+	
 	@Builder
 	@Data
 	@JsonInclude(JsonInclude.Include.NON_NULL)
