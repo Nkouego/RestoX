@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import com.laraim237.restoX.modules.auth.entity.AccessToken;
 import com.laraim237.restoX.modules.auth.enums.TokenType;
 import com.laraim237.restoX.modules.auth.mapper.RegisterMapper;
 import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
+import com.laraim237.restoX.modules.auth.repository.RefreshTokenRepository;
 import com.laraim237.restoX.modules.auth.repository.UserRepository;
 import com.laraim237.restoX.modules.auth.service.Authservice;
 import com.laraim237.restoX.modules.auth.service.EmailService;
@@ -47,6 +49,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class AuthServiceImpl implements Authservice {
+
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantUserRepository restaurantUserRepository;
@@ -61,6 +64,8 @@ public class AuthServiceImpl implements Authservice {
 	private final AuditService auditService;
 	private final JwtService jwtService;
 	private final RefreshTokenService refreshTokenService;
+
+
 	
 		
 	@Override
@@ -274,6 +279,20 @@ public class AuthServiceImpl implements Authservice {
 
 	@Override
 	public AuthResponse logout(Authentication authentication, HttpServletRequest httpRequest) {
-				return null;
+		//1. On recupere le le userId du jwt
+		Jwt jwt = (Jwt)authentication.getPrincipal();
+		Long userId = jwt.getClaim("userId");
+		
+		//2.Revoquer tout les refresh tokens
+		refreshTokenService.revokeAllTokens(userId);
+		
+		//3. Audit
+	    auditService.log(AuditAction.LOGOUT, userId, "user",
+	        null, null, null, userId, httpRequest);
+
+	    return AuthResponse.builder()
+	        .message("Logged out successfully.")
+	        .build();
+		
 	}
 }
