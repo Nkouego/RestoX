@@ -57,13 +57,50 @@ public class EmailServiceImpl implements EmailService{
 
 	@Override
 	public void sendWelcomeEmail(User user) {
-		// TODO Auto-generated method stub
+
+		try {
+			Context context = new Context();
+			context.setVariable("user", user);
+			
+			String text = templateEngine.process("WelcomeEmail", context);
+			
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING); 
+			helper.setSubject("Welcome to RestoX");
+			helper.setFrom(fromEmail, fromName);
+			helper.setTo(user.getEmail());
+			helper.setText(text, true);
+			
+			emailSender.send(message);
+		} catch (Exception e) {
+			log.error("Failed to send confirmation email to: {}", user.getEmail(), e);
+			throw new RuntimeException("Failed to send email", e);
+		}
 		
 	}
 
 	@Override
+	@Async
 	public void sendPasswordResetEmail(User user, AccessToken accessToken) {
-		// TODO Auto-generated method stub
+		try {
+			Context context = new Context();
+			context.setVariable("user", user);
+			context.setVariable("accessToken", accessToken);
+			
+			String text = templateEngine.process("ResetPasswordEmail", context);
+			
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING); 
+			helper.setSubject("Your reset password code is " + accessToken.getToken());
+			helper.setFrom(fromEmail, fromName);
+			helper.setTo(user.getEmail());
+			helper.setText(text, true);
+			
+			emailSender.send(message);
+		} catch (Exception e) {
+			log.error("Failed to send confirmation email to: {}", user.getEmail(), e);
+			throw new RuntimeException("Failed to send email", e);
+		}
 		
 	}
 

@@ -57,6 +57,25 @@ public class AuthDto {
 			String email
 			) {}
 	
+	public static record ForgotPasswordRequest(
+			@Email(message = "Email is not valid")
+			String email
+			) {}
+	
+	public static record ResetPasswordRequest(
+			@NotBlank(message = "Email is required")
+			@Email(message = "Email is not valid")
+			String email,
+			
+			@NotBlank(message = "Code is required")
+			@Size(min = 6, max=6, message = "Code must be 6 characters")
+			String code,
+			
+			@NotBlank(message = "Password is required")
+			@Size(min = 8, message = "Password be at least 8 characters")
+			String newPassword
+			) {}
+	
 	@Builder
 	@Data
 	@JsonInclude(JsonInclude.Include.NON_NULL)
