@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ForgotPasswordRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.RefreshTokenRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResetPasswordRequest;
@@ -61,4 +62,8 @@ public class AuthController {
 		return ResponseEntity.ok(authService.logout(authentication, httpRequest));	
 	}
 
+	@PostMapping("/refresh-token")
+	public ResponseEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request, HttpServletRequest httpRequest){
+		return ResponseEntity.ok(authService.refreshToken(request, httpRequest));	
+	}
 }

@@ -55,6 +55,7 @@ public class EmailServiceImpl implements EmailService{
 		
 	}
 
+	@Async
 	@Override
 	public void sendWelcomeEmail(User user) {
 
@@ -104,6 +105,7 @@ public class EmailServiceImpl implements EmailService{
 		
 	}
 
+	@Async
 	@Override
 	public void sendStaffInvitationEmail(User user, AccessToken accessToken) {
 		// TODO Auto-generated method stub

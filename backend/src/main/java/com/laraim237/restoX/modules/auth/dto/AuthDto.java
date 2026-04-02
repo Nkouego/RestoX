@@ -76,6 +76,11 @@ public class AuthDto {
 			String newPassword
 			) {}
 	
+	public static record RefreshTokenRequest(
+			@NotBlank(message = "Refresh token is required")
+			String refreshToken
+	) {}
+	
 	@Builder
 	@Data
 	@JsonInclude(JsonInclude.Include.NON_NULL)

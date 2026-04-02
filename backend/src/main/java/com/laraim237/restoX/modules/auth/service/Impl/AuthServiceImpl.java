@@ -20,11 +20,13 @@ import com.laraim237.restoX.modules.auth.dto.AuthDto;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ForgotPasswordRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.LoginRequest;
+import com.laraim237.restoX.modules.auth.dto.AuthDto.RefreshTokenRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResetPasswordRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import com.laraim237.restoX.modules.auth.entity.AccessToken;
+import com.laraim237.restoX.modules.auth.entity.RefreshToken;
 import com.laraim237.restoX.modules.auth.enums.TokenType;
 import com.laraim237.restoX.modules.auth.mapper.RegisterMapper;
 import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
@@ -50,6 +52,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class AuthServiceImpl implements Authservice {
 
+
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantUserRepository restaurantUserRepository;
@@ -63,10 +66,7 @@ public class AuthServiceImpl implements Authservice {
 	private final EmailService emailService;
 	private final AuditService auditService;
 	private final JwtService jwtService;
-	private final RefreshTokenService refreshTokenService;
-
-
-	
+	private final RefreshTokenService refreshTokenService;	
 		
 	@Override
 	public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) {
@@ -112,38 +112,41 @@ public class AuthServiceImpl implements Authservice {
 	@Override
 	public AuthResponse verifyEmail(VerifyEmailRequest request, HttpServletRequest httpRequest) {
 		
-//		1. Trouver le user
+		//	1. Trouver le user
 		User user = userRepository.findByEmailIgnoreCase(request.email())
 				    .orElseThrow(()-> new BadCredentialsException("Invalid credentials"));
 		
-//		2.Trouver le TokenType actif
+		//	2.Trouver le TokenType actif
 		AccessToken accessToken = accessTokenRepository.findByUserAndType(user, TokenType.REGISTRATION)
 									.orElseThrow(() -> new OTPException("Invalid or expired code"));
 		
-//		3.Verifier l'expiration
+		//	3.Verifier l'expiration
 		if(accessToken.isExpired()) {
 			throw new OTPException("Expired code, please request a new one");
 		}
 		
-//		4.Verifier code
+		//	4.Verifier code
 		if(!request.code().equals(accessToken.getToken())) {
 			throw new OTPException("Invalid code");
 		}
 		
-//		5.Active le compte
+		//	5.Active le compte
 		user.setEnabled(true);
 		userRepository.save(user);
 		
-//		6.supprimer le token utilisé
+		//	6.supprimer le token utilisé
 		accessTokenRepository.delete(accessToken);
 		
-//		7.generer le jwt
+		//	7.generer le jwt
 		String jwt = jwtService.generateToken(user);
 		
-//		8.Generer le refresh token
+		//	8.Generer le refresh token
 		String refreshToken = refreshTokenService.generateRefreshToken(user);
 		
-//		9.Audit
+		//10/Envoie un email de bienvenu
+		emailService.sendWelcomeEmail(user);
+		
+		//	9.Audit
 		auditService.log(AuditAction.EMAIL_VERIFIED, user.getId(), "User", null, null, null, user.getId(), httpRequest);
 		
 		return AuthResponse.builder()
@@ -219,7 +222,7 @@ public class AuthServiceImpl implements Authservice {
 		// 1.Trouve le user
 		userRepository.findByEmailIgnoreCase(request.email()).ifPresent((user)->{
 			  
-			  //2.On supprime l'ancien token si il existe 
+		  //2.On supprime l'ancien token si il existe 
 		  accessTokenRepository.findByUserAndType(user, TokenType.PASSWORD_RESET)
 		  .ifPresent(accessTokenRepository::delete);
 		  
@@ -263,7 +266,7 @@ public class AuthServiceImpl implements Authservice {
 		}
 		
 		//5.change le mot de passe
-		user.setPassword(request.newPassword());;
+		user.setPassword(passwordEncoder.encode(request.newPassword()));;
 		userRepository.save(user);
 		
 //		//6.supprimer le token utilisé
@@ -294,5 +297,29 @@ public class AuthServiceImpl implements Authservice {
 	        .message("Logged out successfully.")
 	        .build();
 		
+	}
+
+	@Override
+	public AuthResponse refreshToken(RefreshTokenRequest request, HttpServletRequest httpRequest) {
+		//1. On verifie le refresh token
+		RefreshToken refreshToken = refreshTokenService.validateRefreshToken(request.refreshToken());
+		
+		//2.On trouve le user
+		User user = refreshToken.getUser();
+		
+		//3.genere un nouveau jwt
+		String jwt = jwtService.generateToken(user);
+		
+		//4.genre un nouveau refresh token
+		String newRefreshToken = refreshTokenService.generateRefreshToken(user);
+		
+		// 5. Audit
+	    auditService.log(AuditAction.TOKEN_REFRESHED, user.getId(),
+	        "user", null, null, null, user.getId(), httpRequest);
+
+	    return AuthResponse.builder()
+	        .token(jwt)
+	        .refreshToken(newRefreshToken)
+	        .build();
 	}
 }

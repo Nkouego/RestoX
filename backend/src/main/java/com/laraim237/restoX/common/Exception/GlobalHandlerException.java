@@ -88,6 +88,18 @@ public class GlobalHandlerException {
 		
 	}
 	
+	// 401 - Username introuvable
+	@ExceptionHandler(RefreshTokenException.class)
+	public ResponseEntity<ProblemDetail> handleRefreshToken(RefreshTokenException ex, HttpServletRequest request) {
+		log.warn("Invalid Refresh Token {} ", ex.getMessage());
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+		problem.setTitle("Invalid Refresh Token");
+		problem.setInstance(URI.create(request.getRequestURI()));
+		problem.setProperty("timestamp", Instant.now());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
+		
+	}
+	
 	// 403 - compte desactivé
 	@ExceptionHandler(DisabledException.class)
 	public ResponseEntity<ProblemDetail> handleDisabled( DisabledException ex, HttpServletRequest request) {

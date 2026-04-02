@@ -40,5 +40,9 @@ public class RefreshToken {
 
     @Column(nullable = false)
     public boolean revoked;
+    
+    public boolean isExpired() {
+		return Instant.now().isAfter(this.expiryDate);
+	}
 
 }
