@@ -75,19 +75,7 @@ public class GlobalHandlerException {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
 		
 	}
-	
-	// 401 - Username introuvable
-	@ExceptionHandler(UsernameNotFoundException.class)
-	public ResponseEntity<ProblemDetail> handleUsername(UsernameNotFoundException ex, HttpServletRequest request) {
-		log.warn("Authentication failed {} ", ex.getMessage());
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid email or password");
-		problem.setTitle("Authentication failed");
-		problem.setInstance(URI.create(request.getRequestURI()));
-		problem.setProperty("timestamp", Instant.now());
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problem);
-		
-	}
-	
+			
 	// 401 - Username introuvable
 	@ExceptionHandler(RefreshTokenException.class)
 	public ResponseEntity<ProblemDetail> handleRefreshToken(RefreshTokenException ex, HttpServletRequest request) {

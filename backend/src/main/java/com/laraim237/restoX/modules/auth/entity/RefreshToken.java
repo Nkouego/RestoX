@@ -32,7 +32,7 @@ public class RefreshToken {
     private String token;
 
     @Column(nullable = false)
-    private Instant expiryDate;
+    private Instant expiresAt;
     
     @CreationTimestamp
     @Column(updatable = false)
@@ -42,7 +42,7 @@ public class RefreshToken {
     public boolean revoked;
     
     public boolean isExpired() {
-		return Instant.now().isAfter(this.expiryDate);
+		return Instant.now().isAfter(this.expiresAt);
 	}
 
 }

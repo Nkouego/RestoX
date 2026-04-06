@@ -1,7 +1,5 @@
 package com.laraim237.restoX.modules.auth.service.Impl;
 
-import java.security.SecureRandom;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +28,6 @@ import com.laraim237.restoX.modules.auth.entity.RefreshToken;
 import com.laraim237.restoX.modules.auth.enums.TokenType;
 import com.laraim237.restoX.modules.auth.mapper.RegisterMapper;
 import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
-import com.laraim237.restoX.modules.auth.repository.RefreshTokenRepository;
 import com.laraim237.restoX.modules.auth.repository.UserRepository;
 import com.laraim237.restoX.modules.auth.service.Authservice;
 import com.laraim237.restoX.modules.auth.service.EmailService;
@@ -42,6 +39,7 @@ import com.laraim237.restoX.modules.restaurant.RestaurantRole;
 import com.laraim237.restoX.modules.restaurant.RestaurantUser;
 import com.laraim237.restoX.modules.restaurant.RestaurantUserRepository;
 import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.modules.user.UserDetailsImpl;
 import com.laraim237.restoX.modules.user.enums.StaffStatus;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -127,6 +125,7 @@ public class AuthServiceImpl implements Authservice {
 		
 		//	4.Verifier code
 		if(!request.code().equals(accessToken.getToken())) {
+			 accessTokenRepository.delete(accessToken);
 			throw new OTPException("Invalid code");
 		}
 		
@@ -143,7 +142,7 @@ public class AuthServiceImpl implements Authservice {
 		//	8.Generer le refresh token
 		String refreshToken = refreshTokenService.generateRefreshToken(user);
 		
-		//10/Envoie un email de bienvenu
+		//10.Envoie un email de bienvenu
 		emailService.sendWelcomeEmail(user);
 		
 		//	9.Audit
@@ -159,14 +158,14 @@ public class AuthServiceImpl implements Authservice {
 	public AuthResponse login(LoginRequest request, HttpServletRequest httpRequest) {
 		
 		//1.Laisse Spring security s'occuper de la connexion
-		authenticationManager.authenticate(
+	    Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(request.email(), request.password())
 		);
-		
-        //2. Trouver le user
-		User user = userRepository.findByEmailIgnoreCase(request.email())
-				    .orElseThrow(()-> new BadCredentialsException("Invalid credentials"));
-		
+
+		// 2. Récupère l'utilisateur depuis l'objet d'authentification
+	    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+	    User user = userDetails.getUser();
+	    
 		//3.generer le jwt
 		String jwt = jwtService.generateToken(user);
 		
@@ -255,12 +254,12 @@ public class AuthServiceImpl implements Authservice {
 		AccessToken accessToken = accessTokenRepository.findByUserAndType(user, TokenType.PASSWORD_RESET)
 									.orElseThrow(() -> new OTPException("Invalid or expired code"));
 		
-//		//3.Verifier l'expiration
+    	//3.Verifier l'expiration
 		if(accessToken.isExpired()) {
 			throw new OTPException("Expired code, please request a new one");
 		}
 		
-//		//4.Verifier code
+    	//4.Verifier code
 		if(!request.code().equals(accessToken.getToken())) {
 			throw new OTPException("Invalid code");
 		}
@@ -269,7 +268,7 @@ public class AuthServiceImpl implements Authservice {
 		user.setPassword(passwordEncoder.encode(request.newPassword()));;
 		userRepository.save(user);
 		
-//		//6.supprimer le token utilisé
+    	//6.supprimer le token utilisé
 		accessTokenRepository.delete(accessToken);
 		
 		 //7.Audit

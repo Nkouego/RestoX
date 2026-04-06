@@ -28,7 +28,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 		RefreshToken refreshToken = RefreshToken.builder()
 				.user(user)
 				.token(UUID.randomUUID().toString())
-				.expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+				.expiresAt(Instant.now().plus(7, ChronoUnit.DAYS))
 				.revoked(false)
 				.build();
 		refreshTokenRepository.save(refreshToken);
