@@ -15,7 +15,7 @@ import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
-public interface Authservice {
+public interface AuthService {
 
 	AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest);
 

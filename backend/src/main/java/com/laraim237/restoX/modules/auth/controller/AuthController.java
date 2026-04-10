@@ -16,7 +16,7 @@ import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.ResetPasswordRequest;
 import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
-import com.laraim237.restoX.modules.auth.service.Authservice;
+import com.laraim237.restoX.modules.auth.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 	
-	private final Authservice authService;
+	private final AuthService authService;
 	
 	@PostMapping("/register")
 	public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletRequest httpRequest){

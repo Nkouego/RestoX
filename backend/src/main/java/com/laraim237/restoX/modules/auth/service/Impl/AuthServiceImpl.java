@@ -29,7 +29,7 @@ import com.laraim237.restoX.modules.auth.enums.TokenType;
 import com.laraim237.restoX.modules.auth.mapper.RegisterMapper;
 import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
 import com.laraim237.restoX.modules.auth.repository.UserRepository;
-import com.laraim237.restoX.modules.auth.service.Authservice;
+import com.laraim237.restoX.modules.auth.service.AuthService;
 import com.laraim237.restoX.modules.auth.service.EmailService;
 import com.laraim237.restoX.modules.auth.service.JwtService;
 import com.laraim237.restoX.modules.auth.service.RefreshTokenService;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AuthServiceImpl implements Authservice {
+public class AuthServiceImpl implements AuthService {
 
 
 	private final UserRepository userRepository;

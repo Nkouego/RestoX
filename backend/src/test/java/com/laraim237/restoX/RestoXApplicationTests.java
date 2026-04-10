@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class RestoXApplicationTests {
 
 	@Test
-	@Disabled("J'ignore ce test car je n'ai pas encore configuré les variables d'environnement")
 	void contextLoads() {
 	}
 
