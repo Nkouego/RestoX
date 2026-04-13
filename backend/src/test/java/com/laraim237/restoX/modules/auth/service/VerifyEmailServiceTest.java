@@ -20,19 +20,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import com.laraim237.restoX.common.Exception.OTPException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
-import com.laraim237.restoX.modules.auth.entity.AccessToken;
-import com.laraim237.restoX.modules.auth.enums.TokenType;
-import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
-import com.laraim237.restoX.modules.auth.repository.UserRepository;
-import com.laraim237.restoX.modules.auth.service.AuthService;
-import com.laraim237.restoX.modules.auth.service.EmailService;
-import com.laraim237.restoX.modules.auth.service.JwtService;
-import com.laraim237.restoX.modules.auth.service.RefreshTokenService;
-import com.laraim237.restoX.modules.auth.service.Impl.AuthServiceImpl;
-import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.VerifyEmailRequest;
+import com.laraim237.restoX.entity.AccessToken;
+import com.laraim237.restoX.entity.User;
+import com.laraim237.restoX.enums.TokenType;
+import com.laraim237.restoX.repository.AccessTokenRepository;
+import com.laraim237.restoX.repository.UserRepository;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
+import com.laraim237.restoX.service.EmailService;
+import com.laraim237.restoX.service.JwtService;
+import com.laraim237.restoX.service.RefreshTokenService;
+import com.laraim237.restoX.service.Impl.AuthServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 

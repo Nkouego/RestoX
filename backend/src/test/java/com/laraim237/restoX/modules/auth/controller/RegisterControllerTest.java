@@ -21,10 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.laraim237.restoX.common.Exception.AccountAlreadyExistsException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
-import com.laraim237.restoX.modules.auth.service.AuthService;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.RegisterRequest;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
 
 import tools.jackson.databind.ObjectMapper;
 
@@ -45,7 +45,7 @@ public class RegisterControllerTest {
 	@Test
     @DisplayName("✅ 201 — payload valide")
     void register_valid_returns201() throws Exception {
-        RegisterRequest req = new RegisterRequest("John", "Doe", "john@example.com", "password123", "Mon Resto");
+        RegisterRequest req = new RegisterRequest("John", "Doe", "john@example.com", "password123", "Mon Resto", "Ma glacerie", "adresse");
 
         when(authService.register(any(), any()))
                 .thenReturn(AuthResponse.builder().message("Account created successfully.").build());
@@ -58,10 +58,9 @@ public class RegisterControllerTest {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("409 — email déjà existant")
     void register_duplicateEmail_returns409() throws Exception {
-        RegisterRequest req = new RegisterRequest("John", "Doe", "john@example.com", "password123", "Mon Resto");
+        RegisterRequest req = new RegisterRequest("John", "Doe", "john@example.com", "password123", "Mon Resto", "Ma glacerie", "adresse");
 
         when(authService.register(any(), any()))
                 .thenThrow(new AccountAlreadyExistsException("Account already exists"));

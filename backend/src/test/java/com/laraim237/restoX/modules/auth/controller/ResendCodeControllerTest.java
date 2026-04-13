@@ -22,10 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.laraim237.restoX.common.Exception.OTPException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
-import com.laraim237.restoX.modules.auth.service.AuthService;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.ResendCodeRequest;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
 
 
 @SpringBootTest

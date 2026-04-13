@@ -24,10 +24,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.laraim237.restoX.common.Exception.OTPException;
 import com.laraim237.restoX.commons.utils.AuthTestHelpers;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.VerifyEmailRequest;
-import com.laraim237.restoX.modules.auth.service.AuthService;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.VerifyEmailRequest;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
 
 @DisplayName("POST /verify-email")
 @AutoConfigureMockMvc

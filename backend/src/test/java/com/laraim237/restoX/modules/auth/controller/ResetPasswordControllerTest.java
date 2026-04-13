@@ -27,10 +27,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.laraim237.restoX.common.Exception.OTPException;
 import com.laraim237.restoX.config.security.CustomAccessDeniedHandler;
 import com.laraim237.restoX.config.security.Http401UnauthorizedEntryPoint;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.ResetPasswordRequest;
-import com.laraim237.restoX.modules.auth.service.AuthService;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.ResetPasswordRequest;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
 
 @SpringBootTest
 @DisplayName("POST /reset-password")

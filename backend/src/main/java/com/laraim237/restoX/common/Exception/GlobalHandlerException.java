@@ -17,8 +17,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.laraim237.restoX.modules.audit.AuditAction;
-import com.laraim237.restoX.modules.audit.AuditService;
+import com.laraim237.restoX.enums.AuditAction;
+import com.laraim237.restoX.service.AuditService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

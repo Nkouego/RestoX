@@ -18,12 +18,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.laraim237.restoX.common.Exception.RefreshTokenException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.RefreshTokenRequest;
-import com.laraim237.restoX.modules.auth.entity.RefreshToken;
-import com.laraim237.restoX.modules.auth.service.Impl.AuthServiceImpl;
-import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.RefreshTokenRequest;
+import com.laraim237.restoX.entity.RefreshToken;
+import com.laraim237.restoX.entity.User;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.JwtService;
+import com.laraim237.restoX.service.RefreshTokenService;
+import com.laraim237.restoX.service.Impl.AuthServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 

@@ -4,9 +4,9 @@ import java.security.SecureRandom;
 
 import org.springframework.stereotype.Component;
 
-import com.laraim237.restoX.modules.auth.entity.AccessToken;
-import com.laraim237.restoX.modules.auth.enums.TokenType;
-import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.entity.AccessToken;
+import com.laraim237.restoX.entity.User;
+import com.laraim237.restoX.enums.TokenType;
 
 
 public class OtpUtils {

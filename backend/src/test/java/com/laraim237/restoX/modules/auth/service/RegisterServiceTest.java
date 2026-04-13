@@ -19,17 +19,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.laraim237.restoX.common.Exception.AccountAlreadyExistsException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.RegisterRequest;
-import com.laraim237.restoX.modules.auth.mapper.RegisterMapper;
-import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
-import com.laraim237.restoX.modules.auth.repository.UserRepository;
-import com.laraim237.restoX.modules.auth.service.Impl.AuthServiceImpl;
-import com.laraim237.restoX.modules.restaurant.Restaurant;
-import com.laraim237.restoX.modules.restaurant.RestaurantRepository;
-import com.laraim237.restoX.modules.restaurant.RestaurantUserRepository;
-import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.RegisterRequest;
+import com.laraim237.restoX.entity.Restaurant;
+import com.laraim237.restoX.entity.User;
+import com.laraim237.restoX.mapper.RegisterMapper;
+import com.laraim237.restoX.repository.AccessTokenRepository;
+import com.laraim237.restoX.repository.RestaurantRepository;
+import com.laraim237.restoX.repository.RestaurantUserRepository;
+import com.laraim237.restoX.repository.UserRepository;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.EmailService;
+import com.laraim237.restoX.service.Impl.AuthServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -53,7 +54,7 @@ class RegisterServiceTest {
 	
 	@BeforeEach
 	void setUp() {
-		request = new RegisterRequest("Sam", "Kegne", "samkegne@example.com", "password", "Mon Resto");
+		request = new RegisterRequest("Sam", "Kegne", "samkegne@example.com", "password", "Mon Resto", "Ma glacerie", "adresse");
 	}
 	
 	@Test

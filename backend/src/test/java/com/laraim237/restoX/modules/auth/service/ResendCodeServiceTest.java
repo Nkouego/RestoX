@@ -22,15 +22,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.laraim237.restoX.common.Exception.OTPException;
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.ResendCodeRequest;
-import com.laraim237.restoX.modules.auth.entity.AccessToken;
-import com.laraim237.restoX.modules.auth.enums.TokenType;
-import com.laraim237.restoX.modules.auth.repository.AccessTokenRepository;
-import com.laraim237.restoX.modules.auth.repository.UserRepository;
-import com.laraim237.restoX.modules.auth.service.Impl.AuthServiceImpl;
-import com.laraim237.restoX.modules.user.User;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.dto.AuthDto.ResendCodeRequest;
+import com.laraim237.restoX.entity.AccessToken;
+import com.laraim237.restoX.entity.User;
+import com.laraim237.restoX.enums.TokenType;
+import com.laraim237.restoX.repository.AccessTokenRepository;
+import com.laraim237.restoX.repository.UserRepository;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.EmailService;
+import com.laraim237.restoX.service.Impl.AuthServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 

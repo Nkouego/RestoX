@@ -16,9 +16,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.service.AuthService;
+import com.laraim237.restoX.controller.AuthController;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.AuthService;
 
 @WebMvcTest(AuthController.class)
 @DisplayName("POST /logout")

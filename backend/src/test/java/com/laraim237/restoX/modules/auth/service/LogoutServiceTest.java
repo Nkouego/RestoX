@@ -14,9 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import com.laraim237.restoX.modules.audit.AuditService;
-import com.laraim237.restoX.modules.auth.dto.AuthDto.AuthResponse;
-import com.laraim237.restoX.modules.auth.service.Impl.AuthServiceImpl;
+import com.laraim237.restoX.dto.AuthDto.AuthResponse;
+import com.laraim237.restoX.service.AuditService;
+import com.laraim237.restoX.service.RefreshTokenService;
+import com.laraim237.restoX.service.Impl.AuthServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 
