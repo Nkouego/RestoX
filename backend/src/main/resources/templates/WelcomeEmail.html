@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to RestoX</title>
+</head>
+<body style="margin:0; padding:0; background-color:#000000; font-family: Arial, sans-serif; color: #ffffff;">
+  <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding: 48px 16px;">
+    <div style="width:100%; max-width:512px; overflow:hidden;">
+
+      <!-- Header -->
+      <div style="background-color:#16a34a; padding: 28px 40px; text-align:center;">
+        <h1 style="color:#ffffff; font-size:30px; font-weight:bold; letter-spacing:6px; margin:0;">🍽️ RestoX</h1>
+      </div>
+
+      <!-- Body -->
+      <div style="background-color:#111111; padding: 40px;">
+
+        <!-- Welcome icon -->
+        <div style="text-align:center; margin-bottom: 24px;">
+          <div style="display:inline-block; line-height:64px;  width:64px; height:64px; border-radius:50%; background-color:#166534; font-size:28px;">&#127881;</div>
+        </div>
+
+        <h2 style="color:#ffffff; font-size:22px; font-weight:bold; text-align:center; margin:0 0 8px 0;">Welcome to RestoX!</h2>
+        <p style="color:#bbbbbb; font-size:13px; text-align:center; margin:0 0 28px 0;">Your account is confirmed and ready to use</p>
+
+        <p style="color:#ffffff; font-size:15px; margin-bottom:24px;">
+          Hello <strong th:text="${user.fullName}">John</strong>,
+        </p>
+
+		<p style="color:#cccccc; font-size:14px; line-height:1.8; margin-bottom:28px;">
+		  Your RestoX account has been successfully verified. You're all set to create and manage 
+		  as many restaurants as you need, build your teams, and track your operations — all in one place.
+		</p>
+
+        <!-- Feature highlights -->
+        <div style="background-color:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding: 20px; margin-bottom:28px;">
+          <p style="color:#16a34a; font-size:12px; font-weight:bold; letter-spacing:2px; margin:0 0 14px 0; text-transform:uppercase;">What you can do now</p>
+          <div style="display:flex; flex-direction:row; gap:10px;">
+			<div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
+			  <span style="color:#16a34a; font-size:16px;">✓</span> Create and manage multiple restaurants
+			</div>
+            <div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
+              <span style="color:#16a34a; font-size:16px;">✓</span> Invite and manage your team members
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
+              <span style="color:#16a34a; font-size:16px;">✓</span> Track orders and operations in real time
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align:center; margin-bottom:28px;">
+          <a  href="#"
+             style="display:inline-block; background-color:#16a34a; color:#ffffff; text-decoration:none;
+                    font-size:15px; font-weight:bold; padding: 14px 36px; border-radius:8px;">
+            Go to my dashboard →
+          </a>
+        </div>
+
+        <p style="font-size:12px; color:#666666; text-align:center;">
+          If you didn't create a RestoX account, please contact our support team immediately.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color:#0a0a0a; padding: 16px 40px; text-align:center;">
+        <p style="color:#666666; font-size:12px; margin:0;">© 2026 RestoX · All rights reserved</p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

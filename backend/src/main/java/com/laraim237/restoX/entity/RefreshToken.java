@@ -1,0 +1,46 @@
+package com.laraim237.restoX.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.Instant;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "refresh_tokens")
+public class RefreshToken {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @Column(nullable = false, unique = true)
+    private String token;
+
+    @Column(nullable = false)
+    private Instant expiresAt;
+    
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Instant createdAt;
+
+    @Column(nullable = false)
+    public boolean revoked;
+    
+    public boolean isExpired() {
+		return Instant.now().isAfter(this.expiresAt);
+	}
+
+}

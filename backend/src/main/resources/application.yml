@@ -6,10 +6,37 @@ spring:
 
   jpa:     
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         jdbc:
           time_zone: UTC
         globally_quoted_identifiers: true
+ 
+  security:
+    jwt:
+      expiration: 900
+      private-key: classpath:certifications/private.pem		
+      public-key: classpath:certifications/public.pem	
+
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    from:
+      name: RestoX
+    default-encoding: UTF-8
+    properties:
+        mail: 
+          mime:
+            charset: UTF
+          smtp:
+            writetimeout: 30000
+            connection-timeout: 30000
+            timeout: 30000
+            auth: true
+            starttls:
+              enable: true
+              required: true
