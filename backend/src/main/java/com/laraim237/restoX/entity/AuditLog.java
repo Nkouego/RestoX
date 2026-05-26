@@ -3,6 +3,7 @@ package com.laraim237.restoX.entity;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,6 +23,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,8 +40,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "audit_logs")
 public class AuditLog {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -49,7 +51,7 @@ public class AuditLog {
 	private String entityType;
 	
 	@Column(nullable = false)
-	private Long entityId;
+	private String entityId;
 	
 	@Lob
 	private String oldValue;

@@ -7,7 +7,6 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.laraim237.restoX.enums.SystemRole;
 
 import jakarta.persistence.Column;
@@ -21,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,8 +36,8 @@ import lombok.experimental.SuperBuilder;
 public class User{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@Column(nullable = false)
 	private String firstName;
@@ -49,13 +49,17 @@ public class User{
 	private String email;
 	
 	@Column(nullable = false)
-	@JsonIgnore
 	private String password;
+	
+	private String pictureUrl;
+	
+	private String picturePublicId;
 	
 	@Enumerated(EnumType.STRING)
 	private SystemRole systemRole; 
 	
 	@Column(nullable = false)
+	@Builder.Default
 	private boolean enabled = false;
 	
 	@CreationTimestamp
@@ -67,8 +71,9 @@ public class User{
 	private Instant updatedAt;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@Builder.Default
 	private List<RestaurantUser> restaurantUsers = new ArrayList<>();
-
+	
 	public String getFullName() {
 	    return capitalize(firstName) + " " + capitalize(lastName);
 	}

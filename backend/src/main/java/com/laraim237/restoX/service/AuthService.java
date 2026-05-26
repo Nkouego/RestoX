@@ -1,6 +1,5 @@
 package com.laraim237.restoX.service;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 
 import com.laraim237.restoX.dto.AuthDto.AuthResponse;
@@ -13,7 +12,6 @@ import com.laraim237.restoX.dto.AuthDto.ResetPasswordRequest;
 import com.laraim237.restoX.dto.AuthDto.VerifyEmailRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 public interface AuthService {
 

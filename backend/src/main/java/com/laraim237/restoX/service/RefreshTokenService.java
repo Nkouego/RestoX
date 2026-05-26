@@ -7,7 +7,7 @@ public interface RefreshTokenService {
 
 	String generateRefreshToken(User user);
 
-	void revokeAllTokens(Long userId);
+	void revokeAllTokens(String userId);
 
 	RefreshToken validateRefreshToken(String refreshToken);
 

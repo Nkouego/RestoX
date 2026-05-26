@@ -2,6 +2,7 @@ package com.laraim237.restoX.entity;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.UUID;
 
 import com.laraim237.restoX.enums.TokenType;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +30,8 @@ import lombok.Setter;
 @Table(name = "access_token")
 public class AccessToken{
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -44,6 +46,9 @@ public class AccessToken{
 	
 	@Column(nullable = false)
 	private Instant expiredAt;
+	
+	@Column(name = "restaurant_id")
+	private String restaurantId;
 	
 	public AccessToken(String token, User user, int durationInMinutes, TokenType type) {
         this.token = token;

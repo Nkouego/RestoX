@@ -1,6 +1,6 @@
-# 🍽️ Restox X
+# 🍽️ Resto X
 
-**Restox X** est une application de gestion interne de restaurant visant à digitaliser les opérations quotidiennes traditionnellement manuelles (prise de commande, paiements, gestion du personnel, etc.).
+**Resto X** est une application de gestion interne de restaurant visant à digitaliser les opérations quotidiennes traditionnellement manuelles (prise de commande, paiements, gestion du personnel, etc.).
 
 Elle permet aux restaurateurs d’optimiser leur organisation, réduire les erreurs humaines et améliorer l’efficacité du service.
 
@@ -8,7 +8,7 @@ Elle permet aux restaurateurs d’optimiser leur organisation, réduire les erre
 
 ## 🎯 Objectif
 
-L’objectif principal de **Restox X** est de moderniser la gestion des restaurants en :
+L’objectif principal de **Resto X** est de moderniser la gestion des restaurants en :
 
 - Remplaçant les prises de commande papier  
 - Réduisant la dépendance aux paiements en cash  

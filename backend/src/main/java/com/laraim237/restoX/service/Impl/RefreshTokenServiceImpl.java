@@ -37,7 +37,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 	}
 
 	@Override
-	public void revokeAllTokens(Long userId) {
+	public void revokeAllTokens(String userId) {
 		refreshTokenRepository.revokeAllByUserId(userId);	
 	}
 
@@ -54,7 +54,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 	
 	//On verifie si le refresh token n'est pas expiré
 	if(token.isExpired()) {
-		throw new RefreshTokenException("Refresh token has been revoked");
+		throw new RefreshTokenException("Refresh token has expired");
 	}
 	
 		return token;

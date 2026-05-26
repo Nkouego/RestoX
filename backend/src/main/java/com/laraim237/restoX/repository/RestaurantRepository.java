@@ -10,15 +10,14 @@ import org.springframework.data.repository.query.Param;
 
 import com.laraim237.restoX.entity.Restaurant;
 
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, String> {
 	
 	@Query("""
 			SELECT r FROM Restaurant r
 			JOIN r.restaurantUsers ru
 			WHERE ru.user.id = :userId
-			AND r.active = true
 		  """)
-	List<Restaurant>  findAllByUserId(@Param("userId") Long userId);
+	List<Restaurant>  findAllByUserId(@Param("userId") String userId);
 
 	@Query("""
 			SELECT r FROM Restaurant r
@@ -26,6 +25,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 			WHERE r.id = :restaurantId
 			AND ru.user.id = :userId
 			""")
-	Optional<Restaurant> findByIdAndUserId(@Param("restaurantId") Long restaurantId, @Param("userId")  Long userId);
+	Optional<Restaurant> findByIdAndUserId(@Param("restaurantId") String restaurantId, @Param("userId")  String userId);
 
 }

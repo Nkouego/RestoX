@@ -16,7 +16,7 @@
       <!-- Body -->
       <div style="padding: 40px; background-color:#111111;">
         <p style="color:#ffffff; font-size:16px; margin-bottom:12px;">
-          Hello <strong th:text="${user.fullName}">John</strong>,
+          Hello <strong th:text="${userFullName}">John</strong>,
         </p>
         <p style="font-size:14px; line-height:1.8; margin-bottom:32px;">
           Use the code below to verify your email address and activate your RestoX account.
@@ -24,15 +24,15 @@
 
         <!-- Code box -->
         <div style="background-color:#1a1a1a; border:1px solid #333333; border-radius:8px; padding: 20px; text-align:center; margin-bottom:32px;">
-          <div style="color:#ffffff; font-size:36px; font-weight:bold; letter-spacing:12px;" th:text="${accessToken.token}">
+          <div style="color:#ffffff; font-size:36px; font-weight:bold; letter-spacing:12px;" th:text="${token}">
             A3F9K2
           </div>
         </div>
 
         <p style="font-size:12px; text-align:center; margin-bottom:8px;">
-          ⏱️ This code expires in <strong th:text="${accessToken.remainingMinutes}">10</strong> minutes
+          ⏱️ This code expires in <strong th:text=${tokenExpiration}>10</strong> minutes
         </p>
-        <p style="font-size:12px; text-align:center;">
+        <p style="font-size:12px; text-align:center; color:#666666;">
           If you didn't create a RestoX account, you can safely ignore this email.
         </p>
       </div>

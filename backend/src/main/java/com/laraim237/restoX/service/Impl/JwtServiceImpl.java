@@ -25,7 +25,7 @@ public class JwtServiceImpl implements JwtService {
     private long expiration;
 
 	@Override
-	public String generateToken(User user) {
+	public String generateToken(User user, String currentRestaurantId) {
 		Instant now = Instant.now();
 		
 		  // Collecte tous les rôles (system + restaurant)
@@ -38,24 +38,19 @@ public class JwtServiceImpl implements JwtService {
 	    	roles.add("ROLE_"+ru.getRole().name());
 	    });
 	    
-	    //collecte tout les restaurants auquels appartiennent un utilisateur
-	    List<Long> restaurantIds = user.getRestaurantUsers().stream()
-	    		.map(ru-> ru.getRestaurant().getId())
-	    		.toList();
-	    
-	    
 		//Definit les claims du jwt
-	    JwtClaimsSet claims = JwtClaimsSet.builder()
+	    JwtClaimsSet.Builder claims = JwtClaimsSet.builder()
 	    		.issuer("restoX")
 	    		.subject(user.getEmail())
 	    		.claim("userId", user.getId())
 	    		.claim("roles", roles)
-	    		.claim("restaurants", restaurantIds)
 	    		.issuedAt(now)
-	    		.expiresAt(now.plusSeconds(expiration))
-	    		.build();
+	    		.expiresAt(now.plusSeconds(expiration));
 	    
-	    return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+	   if(currentRestaurantId != null) {
+		   claims.claim("currentRestaurantId", currentRestaurantId);
+	   }
+	    return jwtEncoder.encode(JwtEncoderParameters.from(claims.build())).getTokenValue();
 	}
 
 }

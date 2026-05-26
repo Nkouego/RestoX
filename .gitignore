@@ -1,7 +1,4 @@
 
-# Docker - variables d'environnement sensibles
-.env
-
 # STS metadata
 **/.metadata/
 

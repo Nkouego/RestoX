@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,7 +41,7 @@ public class GlobalHandlerException {
 				.stream()
 				.map(e-> Map.of("field", e.getField(), "message", e.getDefaultMessage()))
 				.toList();
-		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Bad request");
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid request body");
 		problem.setTitle("Validation Error");
 		problem.setInstance(URI.create(request.getRequestURI()));
 		problem.setProperty("errors", fieldErrors);
@@ -49,8 +50,8 @@ public class GlobalHandlerException {
 	}
 	
 	// 404 - Ressource introuvable
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<ProblemDetail> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ProblemDetail> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
 		log.warn("Resource not found{} ", ex.getMessage());
 		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Resource not found");
 		problem.setTitle("Not Found");
@@ -129,11 +130,30 @@ public class GlobalHandlerException {
 		problem.setProperty("timestamp", Instant.now());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
 	}
+	
+	@ExceptionHandler(StorageException.class)
+	public ResponseEntity<ProblemDetail> handleStorage(StorageException ex, HttpServletRequest request) {
+	    log.error("Storage error: {}", ex.getMessage());
+	    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+	    problem.setTitle("Storage Error");
+	    problem.setInstance(URI.create(request.getRequestURI()));
+	    problem.setProperty("timestamp", Instant.now());
+	    return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
+	}
 		
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable( OTPException ex, HttpServletRequest request) {
+		log.warn("OTP error: {}", "Invalid request body");
+		ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid request body");
+		problem.setTitle("Bad request");
+		problem.setInstance(URI.create(request.getRequestURI()));
+		problem.setProperty("timestamp", Instant.now());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+	}
+	
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneric(Exception ex, HttpServletRequest request) {
         log.error("Unexpected error", ex);
-
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
         problem.setTitle("Internal Server Error");
         problem.setInstance(URI.create(request.getRequestURI()));

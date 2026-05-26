@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.laraim237.restoX.dto.RestaurantDto.CreateRestaurantRequest;
 import com.laraim237.restoX.dto.RestaurantDto.RestaurantResponse;
+import com.laraim237.restoX.dto.RestaurantDto.SwitchRestaurantRequest;
 import com.laraim237.restoX.dto.RestaurantDto.UpdateRestaurantRequest;
 import com.laraim237.restoX.service.RestaurantService;
 
@@ -46,7 +47,7 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<RestaurantResponse> getById(@PathVariable Long id, 
+	public ResponseEntity<RestaurantResponse> getById(@PathVariable String id, 
 			                                          Authentication authentication, 
 			                                          HttpServletRequest httpRequest){
 		return ResponseEntity.ok(restaurantService.getById(id, authentication, httpRequest));
@@ -54,14 +55,30 @@ public class RestaurantController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<RestaurantResponse>  update(@Valid @RequestBody UpdateRestaurantRequest request,
-			                                          @PathVariable Long id,
+			                                          @PathVariable String id,
 			                                          Authentication authentication,
 			                                          HttpServletRequest httpRequest) {
 		return ResponseEntity.ok(restaurantService.update(request, id, authentication, httpRequest));
 	}
 	
+	@PostMapping("/switch")
+	public ResponseEntity<RestaurantResponse> switchRestaurant(@Valid @RequestBody SwitchRestaurantRequest request,
+	        											   Authentication authentication) {
+	    return ResponseEntity.ok(restaurantService.switchRestaurant(request, authentication));
+	}
+	
 	@PatchMapping("/{id}/archive")
-	public ResponseEntity<RestaurantResponse> archive(@PathVariable Long id, Authentication authentication, HttpServletRequest httpRequest) {	
+	public ResponseEntity<RestaurantResponse> archive(@PathVariable String id, Authentication authentication, HttpServletRequest httpRequest) {	
 		return ResponseEntity.ok(restaurantService.archive(id, authentication, httpRequest));
+	}
+	
+	@PatchMapping("/{id}/activate")
+	public ResponseEntity<RestaurantResponse> activate(@PathVariable String id, Authentication authentication, HttpServletRequest httpRequest) {	
+		return ResponseEntity.ok(restaurantService.activate(id, authentication, httpRequest));
+	}
+	
+	@PatchMapping("/{id}/desactivate")
+	public ResponseEntity<RestaurantResponse> desactivate(@PathVariable String id, Authentication authentication, HttpServletRequest httpRequest) {	
+		return ResponseEntity.ok(restaurantService.deactivate(id, authentication, httpRequest));
 	}
 }

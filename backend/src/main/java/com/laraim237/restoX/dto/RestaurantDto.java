@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.laraim237.restoX.enums.RestaurantRole;
+import com.laraim237.restoX.enums.RestaurantStatus;
+import com.laraim237.restoX.enums.StaffStatus;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,15 +18,18 @@ public class RestaurantDto {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@Builder
 	public record RestaurantResponse(
-		    Long id,
+		    String id,
 		    String name,
 		    String description,
 		    String address,
 		    String phone,
 		    String logoUrl,
-		    boolean active,
+		    RestaurantStatus restaurantStatus,
+		    RestaurantRole role,      
+		    StaffStatus staffStatus,
 		    Instant createdAt,
-		    String message
+		    String message,
+		    String token
 		) {}
 	
 	public static record CreateRestaurantRequest(
@@ -45,4 +51,11 @@ public class RestaurantDto {
 			String address,		
 			String logoUrl
 			) {}
+	
+	public static record SwitchRestaurantRequest(
+			@NotBlank(message = "Restaurant id is required")
+			String idRestaurant
+			) {}
+	
+	
 }

@@ -7,8 +7,13 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.laraim237.restoX.enums.RestaurantStatus;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,24 +21,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
 
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "restaurants")
 public class Restaurant {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
 	@Column(nullable = false)
 	private String name;
@@ -46,8 +50,8 @@ public class Restaurant {
 	
 	private String logoUrl;
 	
-	@Column(nullable = false)
-	private boolean active = true;
+	@Enumerated(EnumType.STRING)
+    private RestaurantStatus status = RestaurantStatus.ACTIVE; 
 	
 	@CreationTimestamp
 	@Column(updatable = false)
@@ -57,13 +61,9 @@ public class Restaurant {
 	@Column(nullable = false)
 	private Instant updatedAt;
 	
-	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<RestaurantUser> restaurantUsers = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Category> categories = new ArrayList<>();
-
-	@OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-	private List<MenuItem> menuItems = new ArrayList<>();
-	
 }

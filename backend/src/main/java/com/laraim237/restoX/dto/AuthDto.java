@@ -1,5 +1,7 @@
 package com.laraim237.restoX.dto;
 
+import java.time.Instant;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.Email;
@@ -26,17 +28,7 @@ public class AuthDto {
 		
 		@NotBlank(message = "Password is required")
 		@Size(min = 8, message = "Password be at least 8 characters")
-		String password,
-		
-		@NotBlank(message = "Restaurant name is required")
-		String restaurantName,
-		
-		@NotBlank(message = "Restaurant description is required")
-		String restaurantDescription,
-		
-		@NotBlank(message = "Restaurant address is required")
-		String restaurantAddress
-		
+		String password
 	) {}
 	
 	public static record VerifyEmailRequest(
@@ -92,9 +84,16 @@ public class AuthDto {
 	@Data
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public static class AuthResponse {
+		private String id;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private Boolean enabled;
 		private String message;
 		private String token;
 		private String refreshToken;
+		private Instant createdAt;
+		private Instant updatedAt;
 	}
 
 

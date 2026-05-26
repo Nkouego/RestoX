@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.laraim237.restoX.entity.AuditLog;
 
 @Repository
-public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
+public interface AuditLogRepository extends JpaRepository<AuditLog, String> {
 
 }
