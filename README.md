@@ -97,16 +97,12 @@ src/
 ##  État du projet
 
 En cours de développement
-
----
-
-## 📄 Licence
-
-MIT
-
+- Branche principale : `master`
+- Branche de developpement: `develop`
+- Dernières fonctionnalités stables disponibles sur la branche master
 ---
 
 ## 📧 Contact
 
 Nkouego Larissa 
-larissankouego@gmail.com 
+larissankouegodev@gmail.com 
