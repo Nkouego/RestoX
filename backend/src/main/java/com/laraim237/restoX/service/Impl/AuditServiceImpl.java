@@ -19,8 +19,8 @@ public class AuditServiceImpl implements AuditService {
 	private final AuditLogRepository auditLogRepository;
 	
 	@Override
-	public void log(AuditAction action, Long entityId, String entityType, String oldValue, String newValue,
-			Long restaurantId, Long performedBy, HttpServletRequest request) {
+	public void log(AuditAction action, String entityId, String entityType, String oldValue, String newValue,
+		String restaurantId, String performedBy, HttpServletRequest request) {
 		
 		AuditLog auditLog = AuditLog.builder()
 									.action(action)

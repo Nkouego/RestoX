@@ -8,21 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -44,8 +42,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	
 	private final Http401UnauthorizedEntryPoint unauthorizedEntryPoint;
+	private final RestaurantStatusFilter restaurantStatusFilter;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final UserDetailsService userDetailsService;
 	
 	@Value("${spring.security.jwt.public-key}")
     private RSAPublicKey publicKey;
@@ -74,13 +72,14 @@ public class SecurityConfig {
             		    "/api/v1/auth/reset-password",
             		    "/api/v1/auth/refresh-token",
             		    "/api/v1/auth/verify-email",
-            		    "/api/v1/auth/resend-code").permitAll()
+            		    "/api/v1/auth/resend-code",
+            		    "/api/v1/auth/confirm-invitation").permitAll()
                 .anyRequest().authenticated()
             )
-//            .authenticationProvider(authenticationProvider())
             .oauth2ResourceServer(oauth2 -> oauth2
             	    .jwt(Customizer.withDefaults())
-            	);
+            	    .authenticationEntryPoint(unauthorizedEntryPoint))
+            .addFilterAfter(restaurantStatusFilter, BearerTokenAuthenticationFilter.class);
         return http.build();
     }
 	
@@ -111,13 +110,6 @@ public class SecurityConfig {
 			        .build();
 	    JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
 	    return new NimbusJwtEncoder(jwkSource);
-	}
-
-	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-	       provider.setPasswordEncoder(passwordEncoder());
-	       return provider;
 	}
 	
 	@Bean

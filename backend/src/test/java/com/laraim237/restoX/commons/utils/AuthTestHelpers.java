@@ -18,7 +18,7 @@ public class AuthTestHelpers {
 	
 	public static User buildUser(boolean enabled) {
 		return User.builder()
-				.id(1L)
+				.id("1")
 				.firstName("Jean")
 				.lastName("Jacques")
 				.enabled(enabled)

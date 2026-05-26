@@ -4,6 +4,6 @@ import com.laraim237.restoX.entity.User;
 
 public interface JwtService {
 
-	String generateToken(User user);
+	String generateToken(User user, String currentRestaurantId);
 
 }

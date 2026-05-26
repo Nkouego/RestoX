@@ -25,7 +25,7 @@
         <p style="color:#bbbbbb; font-size:13px; text-align:center; margin:0 0 28px 0;">Your account is confirmed and ready to use</p>
 
         <p style="color:#ffffff; font-size:15px; margin-bottom:24px;">
-          Hello <strong th:text="${user.fullName}">John</strong>,
+          Hello <strong th:text="${userFullName}">John</strong>,
         </p>
 
 		<p style="color:#cccccc; font-size:14px; line-height:1.8; margin-bottom:28px;">
@@ -37,14 +37,14 @@
         <div style="background-color:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; padding: 20px; margin-bottom:28px;">
           <p style="color:#16a34a; font-size:12px; font-weight:bold; letter-spacing:2px; margin:0 0 14px 0; text-transform:uppercase;">What you can do now</p>
           <div style="display:flex; flex-direction:row; gap:10px;">
-			<div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
-			  <span style="color:#16a34a; font-size:16px;">✓</span> Create and manage multiple restaurants
+			<div style="display:flex; align-items:center; flex-direction:row; gap:12px; color:#dddddd; font-size:13px;">
+			  <span style="color:#16a34a; font-size:16px;">✓</span><p>Create and manage multiple restaurants</p> 
 			</div>
-            <div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
-              <span style="color:#16a34a; font-size:16px;">✓</span> Invite and manage your team members
+            <div style="display:flex; align-items:center; flex-direction:row; gap:12px; color:#dddddd; font-size:13px;">
+              <span style="color:#16a34a; font-size:16px;">✓</span><p>Invite and manage your team members</p> 
             </div>
-            <div style="display:flex; align-items:center; gap:12px; color:#dddddd; font-size:13px;">
-              <span style="color:#16a34a; font-size:16px;">✓</span> Track orders and operations in real time
+            <div style="display:flex; align-items:center; flex-direction:row; gap:12px; color:#dddddd; font-size:13px;">
+              <span style="color:#16a34a; font-size:16px;">✓</span><p>Track orders and operations in real time</p> 
             </div>
           </div>
         </div>
@@ -57,7 +57,6 @@
             Go to my dashboard →
           </a>
         </div>
-
         <p style="font-size:12px; color:#666666; text-align:center;">
           If you didn't create a RestoX account, please contact our support team immediately.
         </p>

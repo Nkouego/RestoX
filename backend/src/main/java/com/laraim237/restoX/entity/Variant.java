@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,16 +31,20 @@ import lombok.experimental.SuperBuilder;
 public class Variant{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@Column(nullable = false)
 	private String name;
 	
+	@Column(nullable = false)
 	private String imageUrl;
+	 
+	private String imagePublicId;
 	
 	private String description;
 	
+	@Builder.Default
 	private boolean available=true;
 	
 	@Column(nullable = false)
@@ -57,4 +62,5 @@ public class Variant{
 	@Column(nullable = false)
 	private Instant updatedAt;
 	
+	private Instant deletedAt;
 }

@@ -6,19 +6,22 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.laraim237.restoX.dto.RestaurantDto;
 import com.laraim237.restoX.dto.RestaurantDto.CreateRestaurantRequest;
 import com.laraim237.restoX.dto.RestaurantDto.RestaurantResponse;
 import com.laraim237.restoX.dto.RestaurantDto.UpdateRestaurantRequest;
 import com.laraim237.restoX.entity.Restaurant;
+import com.laraim237.restoX.entity.RestaurantUser;
 
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 	
-	 @Mapping(target = "active", constant = "true")
-	 Restaurant toRestaurant(RestaurantDto.CreateRestaurantRequest request);
+	
+	 Restaurant toRestaurant(CreateRestaurantRequest request);
 
-	 RestaurantResponse toResponse(Restaurant restaurant);
+	 @Mapping(source = "restaurant.id", target = "id")
+	 @Mapping(source = "restaurantUser.role", target = "role")
+	 @Mapping(source = "restaurantUser.status", target = "staffStatus")
+	 RestaurantResponse toResponse(Restaurant restaurant, RestaurantUser restaurantUser);
 
 	 @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
 	 void updateRestaurant(UpdateRestaurantRequest request, @MappingTarget Restaurant restaurant);

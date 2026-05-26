@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
 	
 	@Modifying
 	@Query("UPDATE RefreshToken rt SET rt.revoked = true WHERE rt.user.id = :userId")
-	void revokeAllByUserId(@Param("userId") Long userId);
+	void revokeAllByUserId(@Param("userId") String userId);
 
 	Optional<RefreshToken> findByToken(String token);
 
